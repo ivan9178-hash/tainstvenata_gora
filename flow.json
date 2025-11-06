@@ -1,0 +1,65 @@
+{
+  "start": "S1",
+  "slides": {
+    "S1": { "img": "1.png", "text": "", "buttons": [ { "label": "Натисни тук", "to": "S2" } ] },
+
+    "S2": { "img": "2.jpg", "text": "", "buttons": [
+      { "label": "Помогни на птичето", "to": "S3" },
+      { "label": "Продължи напред", "to": "S5" }
+    ] },
+
+    "S3": { "img": "3.jpg", "text": "", "buttons": [ { "label": "Продължи", "to": "S4" } ] },
+    "S4": { "img": "4.jpg", "text": "", "buttons": [ { "label": "Продължи", "to": "S5" } ] },
+
+    "S5": { "img": "5.jpg", "text": "", "buttons": [
+      { "label": "Опитай да я заобиколиш", "to": "S6" },
+      { "label": "Изречи заклинанието", "to": "S7" },
+      { "label": "Легни да спиш", "to": "S8" }
+    ] },
+
+    "S6": { "img": "6.jpg", "text": "", "buttons": [ { "label": "Назад", "to": "S5" } ] },
+    "S7": { "img": "7.jpg", "text": "", "buttons": [ { "label": "Влез", "to": "S9" } ] },
+    "S8": { "img": "8.jpg", "text": "", "buttons": [ { "label": "Започни отначало", "to": "S1" } ] },
+
+    "S9": { "img": "9.jpg", "text": "", "buttons": [
+      { "label": "Поздрави хитро", "to": "S10" },
+      { "label": "Предизвикай със сила", "to": "S11" }
+    ] },
+
+    "S10": { "img": "10.jpg", "text": "", "buttons": [
+      { "label": "Помогни ѝ", "to": "S12" },
+      { "label": "Откажи", "to": "S13" },
+      { "label": "Опитай да излъжеш", "to": "S14" }
+    ] },
+
+    "S11": { "img": "11.jpg", "text": "", "buttons": [ { "label": "Започни отначало", "to": "S1" } ] },
+    "S12": { "img": "12.png", "text": "", "buttons": [ { "label": "Следвай я", "to": "S15" } ] },
+    "S13": { "img": "13.jpg", "text": "", "buttons": [ { "label": "Започни отначало", "to": "S1" } ] },
+    "S14": { "img": "14.png", "text": "", "buttons": [ { "label": "Започни отначало", "to": "S1" } ] },
+
+    "S15": { "img": "15.jpg", "text": "", "buttons": [
+      { "label": "Повикай птичето", "to": "S16" },
+      { "label": "Избери на сляпо", "to": "S17" }
+    ] },
+
+    "S16": { "img": "16.jpg", "text": "", "buttons": [ { "label": "Продължи", "to": "S18" } ] },
+    "S17": { "img": "17.jpg", "text": "", "buttons": [ { "label": "Започни отначало", "to": "S1" } ] },
+
+    "S18": { "img": "18.png", "text": "", "buttons": [ { "label": "Премини прага", "to": "S19" } ] },
+    "S19": { "img": "19.png", "text": "", "buttons": [ { "label": "Лети към отвъдното царство", "to": "S20" } ] },
+    "S20": { "img": "20.jpg", "text": "", "buttons": [ { "label": "Пристъпи напред", "to": "S21" } ] },
+    "S21": { "img": "21.jpg", "text": "", "buttons": [ { "label": "Продължи", "to": "S22" } ] },
+    "S22": { "img": "22.jpg", "text": "", "buttons": [ { "label": "Продължи", "to": "S23" } ] },
+    "S23": { "img": "23.jpg", "text": "", "buttons": [ { "label": "Продължи", "to": "S24" } ] },
+
+    "S24": { "img": "24.jpg", "text": "", "buttons": [
+      { "label": "Започни отначало", "to": "S1" },
+      { "label": "Опитай пак да помогнеш", "to": "S20" }
+    ] },
+
+    "S25": { "img": "25.jpg", "text": "", "buttons": [ { "label": "Продължи", "to": "S26" } ] },
+    "S26": { "img": "26.jpg", "text": "", "buttons": [ { "label": "Продължи", "to": "S27" } ] },
+    "S27": { "img": "27.jpg", "text": "", "buttons": [ { "label": "Продължи напред", "to": "S28" } ] },
+    "S28": { "img": "28.jpg", "text": "", "buttons": [ { "label": "Играй отначало", "to": "S1" } ] }
+  }
+}
