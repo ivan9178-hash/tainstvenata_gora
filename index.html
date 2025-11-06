@@ -1,97 +1,157 @@
 <!doctype html>
 <html lang="bg">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Тайнствената гора – интерактивна приказка</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0a0a0d; --fg:#e8e4d8;
-    --panel:#141418; --panelB:#2b2b33;
-    --btn:#d7b36a; --btnB:#8C6A2B; --btnT:#2a170a;
-    --frame:#3b2e19;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:radial-gradient(80% 120% at 50% 30%, #121218, #0a0a0d);color:var(--fg);font-family:'Merriweather',serif}
-  .wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px}
-  .stage{width:100%;max-width:1400px;display:flex;flex-direction:column;align-items:center;gap:12px}
-  .slide{position:relative;width:96vw;max-width:1400px;aspect-ratio:16/9;background:#0f0f12;border-radius:16px;padding:10px;
-         border:2px solid var(--frame); box-shadow:0 0 0 2px rgba(200,169,122,.15), 0 10px 40px rgba(0,0,0,.6);}
-  .slide-inner{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:12px}
-  .fadein{animation:fade .5s ease both}
-  .slide img{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px;display:block}
-  @keyframes fade{from{opacity:0;transform:scale(.995)} to{opacity:1;transform:scale(1)}}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Тайнствената гора — интерактивна приказка</title>
+  <style>
+    :root{
+      --bg:#0b0d10; --panel:#151820; --frame:#2a2d33;
+      --fg:#e8e4d8; --muted:#bfb9a7;
+      --btn:#d7b36a; --btnB:#8c6a2b; --btnText:#27170b;
+      --accent:#f1d088;
+      --shadow:0 12px 30px rgba(0,0,0,.45);
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      background: radial-gradient(1200px 700px at 50% 0%, #11151c 0%, var(--bg) 60%);
+      color:var(--fg);
+      font:16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      display:flex; align-items:center; justify-content:center;
+      padding:20px;
+    }
+    #app{
+      width:min(1400px, 100%);
+      display:flex; flex-direction:column; gap:14px;
+    }
+    .frame{
+      background:linear-gradient(180deg,#13171d,#101419);
+      border:1px solid #3a3f47; border-radius:18px; padding:14px;
+      box-shadow:var(--shadow);
+    }
+    .stage{
+      background:#0f1217; border:1px solid var(--frame);
+      border-radius:12px; overflow:hidden; position:relative;
+      min-height:55vh;
+    }
+    .stage img{
+      display:block; width:100%; height:70vh; object-fit:cover;
+      object-position:center;
+      filter:contrast(1.05) saturate(.95) brightness(.95);
+      animation:fade .4s ease-out both;
+      background:#0c0f13;
+    }
+    @media (max-height:850px){ .stage img{ height:62vh; } }
+    @keyframes fade{ from{opacity:0; transform:scale(1.005)} to{opacity:1; transform:scale(1)} }
 
-  .textpanel{width:96vw;max-width:1400px;background:linear-gradient(180deg, rgba(20,20,24,.95), rgba(16,16,20,.95));
-             border:1px solid var(--panelB); border-radius:14px; padding:18px 20px; line-height:1.58;
-             box-shadow:0 0 0 1px rgba(200,169,122,.12) inset; }
-  .textpanel h2{font-family:'Cinzel',serif; letter-spacing:.5px; margin:0 0 8px 0}
-  .choices{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-  .btn{padding:12px 18px;background:linear-gradient(#e3c782,#caa85e);border:2px solid var(--btnB);border-radius:10px;
-       color:var(--btnT);text-decoration:none;cursor:pointer;font-weight:700;font-family:'Cinzel',serif; letter-spacing:.2px}
-  .btn:hover{filter:brightness(1.07)}
-  .meta{opacity:.7;text-align:center;font-size:0.9rem}
-</style>
+    .panel{
+      background:linear-gradient(180deg,#141821 0%,#10141a 100%);
+      border-top:1px solid #2e3239; padding:16px 18px;
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .text{
+      color:var(--fg);
+      font-size:1.05rem;
+      text-wrap:pretty;
+      white-space:pre-wrap;
+    }
+    .buttons{ display:flex; flex-wrap:wrap; gap:10px }
+    .btn{
+      background:linear-gradient(180deg, var(--btn), #c59c48);
+      color:var(--btnText);
+      border:1px solid var(--btnB);
+      border-bottom-width:2px;
+      padding:10px 16px; border-radius:12px;
+      cursor:pointer; font-weight:600; letter-spacing:.2px;
+      transition:transform .05s ease, filter .15s ease;
+      box-shadow:0 2px 0 rgba(0,0,0,.35);
+      user-select:none;
+    }
+    .btn:hover{ filter:brightness(1.03) }
+    .btn:active{ transform:translateY(1px) }
+
+    .hud{
+      display:flex; align-items:center; justify-content:space-between;
+      color:var(--muted); font-size:.9rem; gap:8px;
+      padding:0 2px;
+    }
+    .small{ opacity:.75 }
+    .linklike{ color:var(--accent); text-decoration:underline; cursor:pointer }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="stage">
-    <div class="slide">
-      <div class="slide-inner"><img id="slideIMG" class="fadein" alt=""></div>
-    </div>
-    <div id="textpanel" class="textpanel" style="display:none"></div>
-    <div id="choices" class="choices"></div>
-    <div class="meta" id="caption"></div>
-  </div>
-</div>
-<script>
-let FLOW; let current;
+  <main id="app">
+    <section class="frame stage">
+      <img id="slideImg" alt="сцена" />
+    </section>
 
-async function load(){
-  const res = await fetch('flow.json'); FLOW = await res.json();
-  const hash = (location.hash||'').replace('#','');
-  go(hash || FLOW.start);
-}
+    <section class="frame panel" id="panel" hidden>
+      <div class="text" id="slideText"></div>
+      <div class="buttons" id="btns"></div>
+      <div class="hud">
+        <div class="small">Сцена: <span id="idOut">—</span></div>
+        <div class="small linklike" id="restart">Започни отначало</div>
+      </div>
+    </section>
+  </main>
 
-function setButtons(btns){
-  const box = document.getElementById('choices'); box.innerHTML='';
-  (btns||[]).forEach(b=>{
-    const a = document.createElement('a');
-    a.className='btn'; a.textContent=b.label; a.href='#';
-    a.onclick=(e)=>{e.preventDefault(); go(b.to)};
-    box.appendChild(a);
-  });
-}
+  <script>
+    const state = { flow:null, id:null };
 
-function go(id){
-  current = id;
-  const s = FLOW.slides[id];
-  if(!s){ alert('Липсва сцена: '+id); return;}
+    const els = {
+      img: document.getElementById('slideImg'),
+      text: document.getElementById('slideText'),
+      btns: document.getElementById('btns'),
+      panel: document.getElementById('panel'),
+      idOut: document.getElementById('idOut'),
+      restart: document.getElementById('restart'),
+    };
 
-  const img = document.getElementById('slideIMG');
-  img.classList.remove('fadein'); void img.offsetWidth; img.classList.add('fadein');
-  img.src = 'slides/' + s.img;
+    fetch('flow.json?'+Date.now())
+      .then(r => r.json())
+      .then(flow => { state.flow = flow; go(flow.start || 'S1'); })
+      .catch(err => { console.error(err); alert('Грешка при зареждане на flow.json'); });
 
-  const tp = document.getElementById('textpanel');
-  if (typeof s.text === 'string' && s.text.trim().length){
-    tp.style.display='block';
-    tp.innerHTML = '<p>'+escapeHTML(s.text).replace(/\n/g,'<br>')+'</p>';
-  } else {
-    tp.style.display='none';
-    tp.innerHTML='';
-  }
+    function go(id){
+      const slide = state.flow.slides[id];
+      if(!slide){ console.warn('Липсва слайд', id); return; }
+      state.id = id;
 
-  document.getElementById('caption').textContent = id + ' • ' + s.img;
-  setButtons(s.buttons);
-  location.hash = '#'+id;
-}
+      // изображение
+      const src = `slides/${slide.img}`;
+      els.img.src = src;
+      els.img.alt = slide.text ? slide.text.replace(/\n/g,' ').slice(0,120) : 'сцена';
 
-function escapeHTML(str){
-  return str.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-}
+      // текст
+      const hasText = slide.text && slide.text.trim().length>0;
+      els.text.textContent = hasText ? slide.text : '';
+      els.panel.hidden = false; // показваме панела винаги (ако искаш да се крие при празен текст — смени на: els.panel.hidden = !hasText)
 
-window.addEventListener('load', load);
-</script>
+      // бутони
+      els.btns.innerHTML = '';
+      (slide.buttons || []).forEach(b=>{
+        const btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.textContent = b.label || 'Продължи';
+        btn.onclick = ()=> go(b.to);
+        els.btns.appendChild(btn);
+      });
+
+      els.idOut.textContent = id + ' • ' + slide.img;
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    els.restart.onclick = ()=> go(state.flow.start || 'S1');
+
+    // навигация с клавиатура: Enter → първи бутон
+    window.addEventListener('keydown', e=>{
+      if(e.key==='Enter'){
+        const first = els.btns.querySelector('.btn');
+        if(first) first.click();
+      }
+    });
+  </script>
 </body>
 </html>
