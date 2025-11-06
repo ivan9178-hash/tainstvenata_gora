@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тайнствената гора – интерактивна приказка</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0d; --fg:#e8e4d8;
+    --panel:#141418; --panelB:#2b2b33;
+    --btn:#d7b36a; --btnB:#8C6A2B; --btnT:#2a170a;
+    --frame:#3b2e19;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:radial-gradient(80% 120% at 50% 30%, #121218, #0a0a0d);color:var(--fg);font-family:'Merriweather',serif}
+  .wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px}
+  .stage{width:100%;max-width:1400px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .slide{position:relative;width:96vw;max-width:1400px;aspect-ratio:16/9;background:#0f0f12;border-radius:16px;padding:10px;
+         border:2px solid var(--frame); box-shadow:0 0 0 2px rgba(200,169,122,.15), 0 10px 40px rgba(0,0,0,.6);}
+  .slide-inner{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:12px}
+  .fadein{animation:fade .5s ease both}
+  .slide img{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px;display:block}
+  @keyframes fade{from{opacity:0;transform:scale(.995)} to{opacity:1;transform:scale(1)}}
+
+  .textpanel{width:96vw;max-width:1400px;background:linear-gradient(180deg, rgba(20,20,24,.95), rgba(16,16,20,.95));
+             border:1px solid var(--panelB); border-radius:14px; padding:18px 20px; line-height:1.58;
+             box-shadow:0 0 0 1px rgba(200,169,122,.12) inset; }
+  .textpanel h2{font-family:'Cinzel',serif; letter-spacing:.5px; margin:0 0 8px 0}
+  .choices{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .btn{padding:12px 18px;background:linear-gradient(#e3c782,#caa85e);border:2px solid var(--btnB);border-radius:10px;
+       color:var(--btnT);text-decoration:none;cursor:pointer;font-weight:700;font-family:'Cinzel',serif; letter-spacing:.2px}
+  .btn:hover{filter:brightness(1.07)}
+  .meta{opacity:.7;text-align:center;font-size:0.9rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="stage">
+    <div class="slide">
+      <div class="slide-inner"><img id="slideIMG" class="fadein" alt=""></div>
+    </div>
+    <div id="textpanel" class="textpanel" style="display:none"></div>
+    <div id="choices" class="choices"></div>
+    <div class="meta" id="caption"></div>
+  </div>
+</div>
+<script>
+let FLOW; let current;
+
+async function load(){
+  const res = await fetch('flow.json'); FLOW = await res.json();
+  const hash = (location.hash||'').replace('#','');
+  go(hash || FLOW.start);
+}
+
+function setButtons(btns){
+  const box = document.getElementById('choices'); box.innerHTML='';
+  (btns||[]).forEach(b=>{
+    const a = document.createElement('a');
+    a.className='btn'; a.textContent=b.label; a.href='#';
+    a.onclick=(e)=>{e.preventDefault(); go(b.to)};
+    box.appendChild(a);
+  });
+}
+
+function go(id){
+  current = id;
+  const s = FLOW.slides[id];
+  if(!s){ alert('Липсва сцена: '+id); return;}
+
+  const img = document.getElementById('slideIMG');
+  img.classList.remove('fadein'); void img.offsetWidth; img.classList.add('fadein');
+  img.src = 'slides/' + s.img;
+
+  const tp = document.getElementById('textpanel');
+  if (typeof s.text === 'string' && s.text.trim().length){
+    tp.style.display='block';
+    tp.innerHTML = '<p>'+escapeHTML(s.text).replace(/\n/g,'<br>')+'</p>';
+  } else {
+    tp.style.display='none';
+    tp.innerHTML='';
+  }
+
+  document.getElementById('caption').textContent = id + ' • ' + s.img;
+  setButtons(s.buttons);
+  location.hash = '#'+id;
+}
+
+function escapeHTML(str){
+  return str.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+
+window.addEventListener('load', load);
+</script>
+</body>
+</html>
